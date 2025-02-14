@@ -1,7 +1,7 @@
-# Sử dụng base image có sẵn từ Jupyter
+# Sử dụng base image từ Jupyter
 FROM jupyter/base-notebook:latest
 
-# Cài đặt các dependencies cần thiết
+# Cài đặt các công cụ cần thiết
 USER root
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
@@ -10,29 +10,22 @@ RUN apt-get update && \
     && apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Cài đặt Visual Studio Code Server
+# Cài đặt code-server (VSCode trên web)
 RUN curl -fsSL https://code-server.dev/install.sh | sh
 
-# Cấu hình để chạy code-server khi khởi động
-RUN mkdir -p /home/jovyan/.local/share/code-server
-COPY start-code-server.sh /usr/local/bin/start-code-server.sh
-RUN chmod +x /usr/local/bin/start-code-server.sh
+# Copy file start.sh vào container
+COPY start.sh /usr/local/bin/start.sh
+RUN chmod +x /usr/local/bin/start.sh
 
-# Cấu hình JupyterLab để chạy code-server
+# Cài đặt JupyterLab extension để chạy code-server
 RUN pip install jupyter-server-proxy
 RUN jupyter labextension install @jupyterlab/server-proxy
 
-# Tạo một script để khởi động code-server
-RUN echo '#!/bin/bash\n\
-code-server --auth none --bind-addr 0.0.0.0:8080 /home/jovyan/work\n\
-' > /usr/local/bin/start-code-server.sh && \
-    chmod +x /usr/local/bin/start-code-server.sh
-
-# Thiết lập quyền cho user jovyan
+# Thiết lập quyền cho user mặc định (jovyan)
 USER jovyan
 
-# Expose cổng 8080 cho code-server
+# Expose cổng 8080 để chạy code-server
 EXPOSE 8080
 
-# Khởi động JupyterLab và code-server
-CMD ["start-code-server.sh"]
+# Chạy script start.sh khi container khởi động
+CMD ["start.sh"]
