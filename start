@@ -1,0 +1,3 @@
+#!/bin/bash
+# Khởi động terminal với quyền root
+exec bash
