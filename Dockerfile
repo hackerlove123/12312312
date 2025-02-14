@@ -1,5 +1,5 @@
-# Sử dụng base image từ Jupyter
-FROM jupyter/base-notebook:latest
+# Sử dụng base image với JupyterLab 3.x
+FROM jupyter/base-notebook:lab-3.6.5
 
 # Cài đặt các công cụ cần thiết
 USER root
@@ -19,7 +19,6 @@ RUN chmod +x /usr/local/bin/start.sh
 
 # Cài đặt JupyterLab extension để chạy code-server
 RUN pip install jupyter-server-proxy
-RUN jupyter labextension install @jupyterlab/server-proxy
 
 # Thiết lập quyền cho user mặc định (jovyan)
 USER jovyan
