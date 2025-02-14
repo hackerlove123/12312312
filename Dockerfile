@@ -9,11 +9,15 @@ RUN apt-get update && \
     git \
     htop \
     speedtest-cli \
+    sudo \
     && apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
 # Thiết lập mật khẩu root
 RUN echo "root:negan" | chpasswd
+
+# Cấp quyền sudo cho user jovyan (user mặc định của JupyterLab)
+RUN echo "jovyan ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
 # Copy file start.sh vào container
 COPY start.sh /usr/local/bin/start.sh
