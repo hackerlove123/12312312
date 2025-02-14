@@ -1,5 +1,5 @@
 # Sử dụng base image với JupyterLab 3.x
-FROM jupyter/base-notebook:lab-3.6.5
+FROM jupyter/base-notebook:latest
 
 # Cài đặt các công cụ cần thiết
 USER root
