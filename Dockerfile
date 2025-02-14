@@ -1,8 +1,15 @@
 # Sử dụng base image với JupyterLab
 FROM jupyter/base-notebook:latest
 
-# Chạy lệnh với quyền root
+# Chạy với quyền root
 USER root
+
+# Thiết lập user root làm mặc định khi container khởi động
+ENV NB_USER root
+ENV NB_UID=0
+ENV NB_GID=0
+
+# Cài đặt các công cụ cần thiết
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     curl \
