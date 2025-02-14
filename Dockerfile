@@ -1,22 +1,23 @@
-# Sử dụng base image với JupyterLab 3.x
+# Sử dụng base image với JupyterLab
 FROM jupyter/base-notebook:latest
 
-# Cài đặt các công cụ cần thiết
+# Chuyển sang user root để cài đặt các gói và cấu hình
 USER root
+
+# Cài đặt các công cụ cần thiết
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     curl \
     git \
     htop \
-    speedtest-cli \
     sudo \
     && apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Thiết lập mật khẩu root
-RUN echo "root:negan" | chpasswd
+# Xóa mật khẩu của user root (để không cần nhập mật khẩu)
+RUN passwd -d root
 
-# Cấp quyền sudo cho user jovyan (user mặc định của JupyterLab)
+# Cấp quyền sudo không cần mật khẩu cho user jovyan
 RUN echo "jovyan ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
 # Thiết lập user mặc định là root
@@ -35,4 +36,4 @@ USER root
 EXPOSE 8888
 
 # Chạy script start.sh khi container khởi động
-CMD ["start.sh"]
+CMD ["/usr/local/bin/start.sh"]
