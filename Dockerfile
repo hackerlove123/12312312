@@ -7,24 +7,23 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     curl \
     git \
+    htop \
+    speedtest-cli \
     && apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Cài đặt code-server (VSCode trên web)
-RUN curl -fsSL https://code-server.dev/install.sh | sh
+# Thiết lập mật khẩu root
+RUN echo "root:negan" | chpasswd
 
 # Copy file start.sh vào container
 COPY start.sh /usr/local/bin/start.sh
 RUN chmod +x /usr/local/bin/start.sh
 
-# Cài đặt JupyterLab extension để chạy code-server
-RUN pip install jupyter-server-proxy
+# Thiết lập quyền cho user root
+USER root
 
-# Thiết lập quyền cho user mặc định (jovyan)
-USER jovyan
-
-# Expose cổng 8080 để chạy code-server
-EXPOSE 8080
+# Expose cổng 8888 để chạy JupyterLab
+EXPOSE 8888
 
 # Chạy script start.sh khi container khởi động
 CMD ["start.sh"]
