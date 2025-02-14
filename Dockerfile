@@ -19,6 +19,11 @@ RUN echo "root:negan" | chpasswd
 # Cấp quyền sudo cho user jovyan (user mặc định của JupyterLab)
 RUN echo "jovyan ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
+# Thiết lập user mặc định là root
+ENV NB_USER root
+ENV NB_UID 0
+ENV NB_GID 0
+
 # Copy file start.sh vào container
 COPY start.sh /usr/local/bin/start.sh
 RUN chmod +x /usr/local/bin/start.sh
