@@ -1,15 +1,15 @@
 # Sử dụng base image với JupyterLab
 FROM jupyter/base-notebook:latest
 
-# Cài đặt các công cụ cần thiết
-USER jovyan
-RUN sudo apt-get update && \
-    sudo apt-get install -y --no-install-recommends \
+# Chạy lệnh với quyền root
+USER root
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
     curl \
     git \
     htop \
-    && sudo apt-get clean && \
-    sudo rm -rf /var/lib/apt/lists/*
+    && apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 # Copy file start.sh vào container
 COPY start.sh /usr/local/bin/start.sh
