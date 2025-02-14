@@ -7,8 +7,15 @@ RUN apt-get update && apt-get install -y \
     jupyter \
     && rm -rf /var/lib/apt/lists/*
 
-# Tạo thư mục làm việc
-WORKDIR /root
+# Tạo thư mục làm việc và cấp quyền full
+RUN mkdir -p /workspace && chmod -R 777 /workspace
 
-# Chạy Jupyter Notebook với terminal
-CMD ["jupyter", "notebook", "--NotebookApp.token=''", "--NotebookApp.password=''", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root"]
+# Thiết lập thư mục làm việc
+WORKDIR /workspace
+
+# Sao chép script khởi động
+COPY start.sh /workspace/start.sh
+RUN chmod +x /workspace/start.sh
+
+# Chạy script khởi động
+CMD ["/workspace/start.sh"]
